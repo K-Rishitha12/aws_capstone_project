@@ -19,19 +19,21 @@ def init_db():
     c = conn.cursor()
 
     c.execute("""CREATE TABLE IF NOT EXISTS items(
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
                 price INTEGER,
                 image TEXT)""")
 
+    # ✅ FIXED USERS TABLE
     c.execute("""CREATE TABLE IF NOT EXISTS users(
-                id INTEGER PRIMARY KEY,
-                name TEXT,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT,
                 email TEXT,
                 password TEXT)""")
 
     conn.commit()
     conn.close()
+
 
 init_db()
 
@@ -69,13 +71,14 @@ def login():
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "POST":
-        name = request.form["name"]
+        username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
 
+
         conn = sqlite3.connect(DB_NAME)
-        conn.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)",
-                     (name,email,password))
+        conn.execute("INSERT INTO users(username,email,password) VALUES(?,?,?)",
+                     (username,email,password))
         conn.commit()
         conn.close()
 
